@@ -64,7 +64,6 @@ export default {
     
     created(){
         this.listStudent = this.$store.state.liststudents
-        console.log(this.listStudent);
     },
     data(){
         return{
@@ -75,9 +74,6 @@ export default {
         }
     },
     computed:{
-        // liststudents(){
-        //     return ;
-        // },
         listclasses(){
             return this.$store.state.listclasses;
         },

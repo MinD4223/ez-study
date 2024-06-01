@@ -1,8 +1,13 @@
 <template>
-    <router-link to="/addclass" type="button" class="btn btn-primary position-absolute end-0 " style="margin: 10px 30px 0 0;">Thêm lớp</router-link>
+    <router-link
+        to="/addclass"
+        type="button"
+        class="btn btn-primary position-absolute end-0"
+        style="margin: 10px 30px 0 0"
+        >Thêm lớp</router-link
+    >
     <div class="listclass">
-        
-        <table class="table table-striped" style="margin: 50px 50px 0;">
+        <table class="table table-striped" style="margin: 50px 50px 0">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -11,12 +16,25 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="classitem in listclasses" :key="classitem.id" >
+                <tr v-for="classitem in resultClasses" :key="classitem.id">
                     <th scope="row">{{ classitem.id }}</th>
-                    <td>{{classitem.class }}</td>
+                    <td>{{ classitem.class }}</td>
                     <td>
-                        <button @click="updateClass(classitem.id)" type="button" class="btn btn-success" style="margin-right: 10px ;">Sửa</button>
-                        <button @click="deleteClass(classitem.id)" type="button" class="btn btn-danger">Xóa</button>
+                        <button
+                            @click="updateClass(classitem.id)"
+                            type="button"
+                            class="btn btn-success"
+                            style="margin-right: 10px"
+                        >
+                            Sửa
+                        </button>
+                        <button
+                            @click="deleteClass(classitem.id)"
+                            type="button"
+                            class="btn btn-danger"
+                        >
+                            Xóa
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -26,22 +44,32 @@
 
 <script>
 export default {
-    computed:{
-        listclasses(){
-            return this.$store.state.listclasses
-        }
+    data() {
+        return {
+            resultClasses: [],
+        };
     },
-    methods:{
-        deleteClass(classitemId){
-            this.$store.commit('DELETE_CLASS', classitemId);
+    created() {
+        this.traverseList(this.$store.state.listclasses);
+    },
+    methods: {
+        deleteClass(classitemId) {
+            this.$store.commit("DELETE_CLASS", classitemId);
         },
-        updateClass(classitemId){
+        updateClass(classitemId) {
             this.$router.push("/ModifyClass/" + classitemId);
-        }
-    }
-}
+        },
+        traverseList(items) {
+            for (const item of items) {
+                this.resultClasses.push({
+                    id: item.id,
+                    class: item.class,
+                });
+                this.traverseList(item.childClass); // Add "--" for child classes
+            }
+        },
+    },
+};
 </script>
 
-<style lang="css">
-    
-</style>
+<style lang="css"></style>

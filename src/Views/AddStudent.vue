@@ -14,8 +14,7 @@
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Lớp </label>
             <select v-model="student.classs" class="form-select" aria-label="Default select example">  
-                <option v-for="itemClass in listClass" :key="itemClass.id" >{{itemClass.grade + itemClass.class}}</option>
-                
+                <option v-for="itemClass in resultClasses" :key="itemClass.id" :value="itemClass.id">{{itemClass.name}}</option>
             </select>
         </div>
 
@@ -28,6 +27,15 @@
 
 export default {
     methods: {
+        traverseList(items, prefix = "") {
+            for (const item of items) {
+                this.resultClasses.push({
+                    id: item.id,
+                    name: prefix + item.class
+                });
+                this.traverseList(item.childClass, prefix + "--"); // Add "--" for child classes
+            }
+        },
         onSubmit(event){
             event.preventDefault();
             this.yearOfBirth = new Date(this.student.age).getFullYear();
@@ -48,16 +56,13 @@ export default {
                 name: '',
                 age: '',
                 classs: ''
-            }
-            
+            },
+            resultClasses: []
         }
     },
-    computed:{
-        listClass(){
-            return this.$store.state.listclasses;
-        }
-    }
-    
+    created(){
+        this.traverseList(this.$store.state.listclasses)
+    },
 }
 </script>
 
