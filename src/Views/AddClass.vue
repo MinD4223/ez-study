@@ -9,7 +9,7 @@
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Lớp cha: </label>
                 <select v-model="classitem.grade"  class="form-select" aria-label="Default select example">
-                    <option v-for="classItem in listClassAfterHandle" :key="classItem.id">{{classItem.class}}</option>
+                    <option v-for="(classItem, index) in resultClasses" :key="index">{{classItem}}</option>
                 </select>
             </div>
             <button @click="clickAdd" type="submit" class="btn btn-primary">Lưu</button>
@@ -26,14 +26,13 @@ export default {
                 grade: "",
                 class: "",
             },
-            listclasses: this.$store.state.listclasses
+            listclasses: this.$store.state.listclasses,
+            resultClasses: []
         }
     },
-    computed:{
-        listClassAfterHandle(){
-            let listClasses = this.$store.state.listclasses;
-            return this.handleConvertClasses(listClasses, 0)
-        }
+    created(){
+        let listClasses = this.$store.state.listclasses;
+        return this.traverseList(listClasses)
     },
     methods:{
         clickAdd(){
@@ -45,8 +44,11 @@ export default {
             });
             this.$router.push("/listclass");
         },
-        handleConvertClasses(listClasses, countGrade){
-            
+        traverseList(items, prefix = "") {
+            for (const item of items) {
+                this.resultClasses.push(prefix + item.class);
+                this.traverseList(item.childClass, prefix + "--"); // Add "--" for child classes
+            }
         }
     }
 }

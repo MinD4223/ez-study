@@ -42,7 +42,16 @@ const store = createStore({
                         {
                             id: 2,
                             class: "12A",
-                            childClass: []
+                            childClass: [{
+                                id: 2,
+                                class: "12A",
+                                childClass: []
+                            },
+                            {
+                                id: 3,
+                                class: "11B",
+                                childClass: []
+                            },]
                         },
                         {
                             id: 3,
